@@ -10,13 +10,13 @@
  * add <reg destino>,<reg a> <reg b> (exemplo: add r1,r2,r3)
  * addi <reg destino>,<reg a>,<immediato> (exemplo: addi r1,r2,123);
  * sub -- semelhante a addl
- * jlt <reg endereco alvo>,<reg a>,<reg b> (desvio condicional para endereco alvo caso valor de reg a seja menor que o de reg b>.
+ * jlt <reg endereco alvo>,<reg a>,<reg b> (desvio condicional para endereco alvo caso valor de reg a seja menor que o de reg b>. Se a<b retorna o registrador alvo
  * je -- mesmo que jlt, mas no caso dos valores serem iguais
- * jmp <reg destino> (desvio incondicional)
- * ld <reg destino>,<reg endereco> (carrega o valor contino no endereco de memoria para o registrador de destino
- * sd <reg valor>,<reg endereco> (escreve o valor presente em reg valor no endereco de memoria dado por reg endereco
- * hlt (halt, termina o programa)
- * prt <reg valor> (imprime na tela o caracter cujo valor esta em reg valor)
+ * jmp <reg destino> (desvio incondicional). retorna o valor do registrador alvo
+ * ld <reg destino>,<reg endereco> (carrega o valor contino no endereco de memoria para o registrador de destino). Pega o valor do endereço de memoria Ex: 1001, 1002... e joga no registrador destino
+ * sd <reg valor>,<reg endereco> (escreve o valor presente em reg valor no endereco de memoria dado por reg endereco).
+ * hlt (halt, termina o programa). finaliza as instruções
+ * prt <reg valor> (imprime na tela o caracter cujo valor esta em reg valor).
  *
  *
  * Todos os registradores tem 8 bits e as instruções possuem 32 bits, como visto na struct abaixo. Considere que ha infinitos registradores, para simplificar, e memoria infinita.
