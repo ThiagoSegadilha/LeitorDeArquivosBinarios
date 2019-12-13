@@ -16,6 +16,7 @@ typedef struct Instr {
 int main() {
 	
 	int registradores[MAX_REGISTRADORES];
+	memset(registradores, 0, sizeof(registradores));
 	//int register1, register2, register3, register4, register5, register6, register7, register8, register9, register10 = 0;
 	//register1 = register2 = register3 = register4 = register5 = register6 = register7 = register8 = register9 = register10 = 0;
 	int resultado;
@@ -34,25 +35,44 @@ int main() {
 		{
 			case 0:
 				add(&registradores[x.dst], x.a, x.b);
+				printf("Registrador R%d = %d\n", x.dst, registradores[x.dst]);
+				break;
 			case 1:
 				addi(&registradores[x.dst], x.a, x.b);
+				printf("Registrador R%d = %d\n", x.dst, registradores[x.dst]);
+				break;
 			case 2:
 				sub(&registradores[x.dst], x.a, x.b);
-				printf("Resultado: %d, %d\n", resultado, registradores[x.dst]);
+				printf("Registrador R%d = %d\n", x.dst, registradores[x.dst]);
+				break;
 			case 3:
 				sub(&registradores[x.dst], x.a, x.b);
+				printf("Registrador R%d = %d\n", x.dst, registradores[x.dst]);
+				break;
 			case 4:
 				sub(&registradores[x.dst], x.a, x.b);
+				printf("Registrador R%d = %d\n", x.dst, registradores[x.dst]);
+				break;
 			case 5:
 				sub(&registradores[x.dst], x.a, x.b);
+				printf("Registrador R%d = %d\n", x.dst, registradores[x.dst]);
+				break;
 			case 6:
 				sub(&registradores[x.dst], x.a, x.b);
+				printf("Registrador R%d = %d\n", x.dst, registradores[x.dst]);
+				break;
 			case 7:
 				sub(&registradores[x.dst], x.a, x.b);
+				printf("Registrador R%d = %d\n", x.dst, registradores[x.dst]);
+				break;
 			case 8:
 				sub(&registradores[x.dst], x.a, x.b);
+				printf("Registrador R%d = %d\n", x.dst, registradores[x.dst]);
+				break;
 			case 9:
 				sub(&registradores[x.dst], x.a, x.b);
+				printf("Registrador R%d = %d\n", x.dst, registradores[x.dst]);
+				break;
 			default:
 				break;
 		}
@@ -60,41 +80,41 @@ int main() {
 }
 
 void add(int *registrador, int a, int b) {
-	*registrador = a + b;
+	*registrador = *registrador + a + b;
 }
 
 void addi(int *registrador, int a, int b) {
-	*registrador = a + b;
+	*registrador = *registrador + a + b;
 }
 
 void sub(int *registrador, int a, int b) {
-	*registrador = a - b;
+	*registrador = *registrador + a - b;
 }
 
 void jlt(int *registrador, int a, int b) {
-	*registrador = a - b;
+	*registrador = *registrador + a - b;
 }
 
 void je(int *registrador, int a, int b) {
-	*registrador = a - b;
+	*registrador = *registrador + a - b;
 }
 
 void jmp(int *registrador, int a, int b) {
-	*registrador = a - b;
+	*registrador = *registrador + a - b;
 }
 
 void ld(int *registrador, int a, int b) {
-	*registrador = a - b;
+	*registrador = *registrador + a - b;
 }
 
 void sd(int *registrador, int a, int b) {
-	*registrador = a - b;
+	*registrador = *registrador + a - b;
 }
 
 void hlt(int *registrador, int a, int b) {
-	*registrador = a - b;
+	*registrador = *registrador + a - b;
 }
 
 void prt(int *registrador, int a, int b) {
-	*registrador = a - b;
+	*registrador = *registrador + a - b;
 }
