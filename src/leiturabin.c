@@ -3,6 +3,8 @@
 
 #define MAX_REGISTRADORES 100
 
+#define MAX_MEMORIAS 100
+
 typedef struct Instr {
 	char opcode;
 	char dst;
@@ -16,9 +18,8 @@ typedef struct Instr {
 int main() {
 	
 	int registradores[MAX_REGISTRADORES];
+	int memoria[MAX_MEMORIAS];
 	memset(registradores, 0, sizeof(registradores));
-	//int register1, register2, register3, register4, register5, register6, register7, register8, register9, register10 = 0;
-	//register1 = register2 = register3 = register4 = register5 = register6 = register7 = register8 = register9 = register10 = 0;
 	int resultado;
 	int n;
 	instr_t x;
@@ -92,29 +93,33 @@ void sub(int *registrador, int a, int b) {
 }
 
 void jlt(int *registrador, int a, int b) {
-	*registrador = *registrador + a - b;
+	if(a < b) {
+		*registrador = *registrador;		
+	}
 }
 
 void je(int *registrador, int a, int b) {
-	*registrador = *registrador + a - b;
+	if(a == b) {
+		*registrador = *registrador;		
+	}
 }
 
 void jmp(int *registrador, int a, int b) {
-	*registrador = *registrador + a - b;
+	*registrador = *registrador;
 }
 
-void ld(int *registrador, int a, int b) {
-	*registrador = *registrador + a - b;
+void ld(int *registrador, int *memoria) {
+	*registrador = *memoria;
 }
 
-void sd(int *registrador, int a, int b) {
-	*registrador = *registrador + a - b;
+void sd(int *registrador, int *memoria) {
+	*memoria = *registrador;
 }
 
 void hlt(int *registrador, int a, int b) {
-	*registrador = *registrador + a - b;
+	printf("Fim das instrucoes");
 }
 
-void prt(int *registrador, int a, int b) {
-	*registrador = *registrador + a - b;
+void prt(int *registrador, int a) {
+	printf("O valor do Registrador R%d: equivale ao caracter %c.", a, a);
 }
