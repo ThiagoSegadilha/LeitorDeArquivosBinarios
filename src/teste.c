@@ -22,6 +22,7 @@ int main() {
 	int opcode[MAX_OPCODE];
 	int registradores[MAX_REGISTRADORES];
 	int memoria[MAX_MEMORIAS];
+	int registradoresDst[MAX_REGISTRADORES];
 	int instrA[MAX_INSTRA];
 	int instrB[MAX_INSTRB];
 	
@@ -31,28 +32,45 @@ int main() {
 	memset(instrA, 0, sizeof(instrA));
 	memset(instrB, 0, sizeof(instrB));
 	
+	int *apontador;
 	int resultado;
-	int n, i;
+	int n, i, a = 0;
 	instr_t x;
 	FILE *LeituraBin;
 	
 	
+	
 	LeituraBin = fopen("vetor.bin","rb");
 		
+	i = 0;
 	while(fread(&x, sizeof(instr_t), 1, LeituraBin)) {
-	//	printf("%d", x);
-		//printf("OPCODE: %d\tDST: %d\t INSTR A: %d\t INSTR B: %d\n", x.opcode, x.dst, x.a, x.b);
+				
+		opcode[i] = x.opcode;
+		registradoresDst[i] = x.dst;
+		instrA[i] = x.a;
+		instrB[i] = x.b;
 		
-		switch(x.opcode)
+		
+		i++;
+	}
+	
+	for(n = 0; n < 10; n++) {
+		apontador = &opcode[n];
+		printf("Apontador: %d\t OpCode: %d\t Dst: %d\t InstrA: %d\t InstrB: %d\n", *apontador, opcode[n], registradoresDst[n], instrA[n], instrB[n]);
+		
+		
+		switch(*apontador)
 		{
 			case 0:
-				add(&registradores[x.dst], x.a, x.b);
+				add(&registradores[x.dst], &registradores[x.a], &registradores[x.b]);
 				break;
 			case 1:
-				addi(&registradores[x.dst], &registradores[x.a], x.b);
+				addi(&registradores[registradoresDst[n]], &registradores[instrA[n]], instrB[n]);
+				printf("R%d: %d\t R%d: %d\t Var: %d\n", registradoresDst[n], registradores[registradoresDst[n]], instrA[n], registradores[instrA[n]], instrB[n]);
 				break;
 			case 2:
-				sub(&registradores[x.dst], x.a, x.b);
+				sub(&registradores[registradoresDst[n]], &registradores[instrA[n]], &registradores[instrB[n]]);
+				printf("R%d: %d\t R%d: %d\t R%d: %d\n", registradoresDst[n], registradores[registradoresDst[n]], instrA[n], registradores[instrA[n]], instrB[n], registradores[instrB[n]]);
 				break;
 			case 3:
 				jlt(&registradores[x.dst], x.a, x.b);
@@ -78,25 +96,19 @@ int main() {
 			default:
 				break;
 		}
-		
-		printf("REGISTRADORES:\n");
-		
-		for(i = 0; i < 10; i++) {
-			printf("R%d = %d\n", i, registradores[i])	;
-		}
 	}
 }
 
-void add(int *registrador, int a, int b) {
-	*registrador = *registrador + a + b;
+void add(int *registrador, int *registradorA, int *registradorB) {
+	*registrador = *registradorA + *registradorB;
 }
 
 void addi(int *registradorDst, int *registradorA, int b) {
-	*registradorDst = *registradorDst + *registradorA + b;
+	*registradorDst = *registradorA + b;
 }
 
-void sub(int *registrador, int a, int b) {
-	*registrador = *registrador + a - b;
+void sub(int *registrador, int *registradorA, int *registradorB) {
+	*registrador = *registradorA - *registradorB;
 }
 
 void jlt(int *registrador, int a, int b) {
@@ -124,9 +136,9 @@ void sd(int *registrador, int *memoria) {
 }
 
 void hlt() {
-	printf("Fim das instrucoes");
+	printf("Fim das instrucoes\n");
 }
 
 void prt(int *registrador, int dst) {
-	printf("O valor do Registrador R%d: %d equivale ao caracter %c.", dst, *registrador, *registrador);
+	printf("O valor do Registrador R%d: %d equivale ao caracter %c.\n", dst, *registrador, *registrador);
 }
