@@ -34,7 +34,7 @@ int main() {
 	
 	int *apontador;
 	int resultado;
-	int n, i, a = 0;
+	int n, j, i, aux, a = 0;
 	instr_t x;
 	FILE *LeituraBin;
 	
@@ -54,53 +54,85 @@ int main() {
 		i++;
 	}
 	
-	for(n = 0; n < 10; n++) {
+	n = 0;		
+	while(1) {
+		
 		apontador = &opcode[n];
-		printf("Apontador: %d\t OpCode: %d\t Dst: %d\t InstrA: %d\t InstrB: %d\n", *apontador, opcode[n], registradoresDst[n], instrA[n], instrB[n]);
+				
+		printf("OpCode: %d\t Dst: %d\t InstrA: %d\t InstrB: %d\n",opcode[n], registradoresDst[n], instrA[n], instrB[n]);
 		
 		
 		switch(*apontador)
 		{
 			case 0:
-				add(&registradores[x.dst], &registradores[x.a], &registradores[x.b]);
+				printf("ADD R%d, R%d, R%d  (Soma o valor que tem no registrador R%d com o valor que tem no registrador R%d e armazena no registrador R%d).\n", registradoresDst[n], instrA[n], instrB[n], instrA[n], instrB[n], registradoresDst[n]);
+				add(&registradores[registradoresDst[n]], &registradores[instrA[n]], &registradores[instrB[n]]);
+				printf("R%d: %d\t R%d: %d\t R%d: %d\n\n", registradoresDst[n], registradores[registradoresDst[n]], instrA[n], registradores[instrA[n]], instrB[n], registradores[instrB[n]]);
+				n++;
 				break;
 			case 1:
+				printf("ADDI R%d, R%d, %d  (Soma o valor que tem no registrador R%d com o valor imediato %d e armazena no registrador R%d).\n", registradoresDst[n], instrA[n], instrB[n], instrA[n], instrB[n], registradoresDst[n]);
 				addi(&registradores[registradoresDst[n]], &registradores[instrA[n]], instrB[n]);
-				printf("R%d: %d\t R%d: %d\t Var: %d\n", registradoresDst[n], registradores[registradoresDst[n]], instrA[n], registradores[instrA[n]], instrB[n]);
+				printf("R%d: %d\t R%d: %d\t Var: %d\n\n", registradoresDst[n], registradores[registradoresDst[n]], instrA[n], registradores[instrA[n]], instrB[n]);
+				n++;
 				break;
 			case 2:
+				printf("SUB R%d, R%d, R%d  (Subtrai o valor que tem no registrador R%d pelo valor que tem no registrador R%d e armazena no registrador R%d).\n", registradoresDst[n], instrA[n], instrB[n], instrA[n], instrB[n], registradoresDst[n]);
 				sub(&registradores[registradoresDst[n]], &registradores[instrA[n]], &registradores[instrB[n]]);
-				printf("R%d: %d\t R%d: %d\t R%d: %d\n", registradoresDst[n], registradores[registradoresDst[n]], instrA[n], registradores[instrA[n]], instrB[n], registradores[instrB[n]]);
+				printf("R%d: %d\t R%d: %d\t R%d: %d\n\n", registradoresDst[n], registradores[registradoresDst[n]], instrA[n], registradores[instrA[n]], instrB[n], registradores[instrB[n]]);
+				n++;
 				break;
 			case 3:
-				jlt(&registradores[x.dst], x.a, x.b);
+				printf("JLT R%d, R%d, R%d  (Compara o valor que tem no registrador R%d com o valor que tem no registrador R%d, se R%d < R%d, retona para a instrucao equivalente ao valor do registrador R%d).\n", registradoresDst[n], instrA[n], instrB[n], instrA[n], instrB[n], instrA[n], instrB[n], registradoresDst[n]);
+				aux = jlt(&registradores[registradoresDst[n]], &registradores[instrA[n]], &registradores[instrB[n]]);
+				if(aux) {
+					printf("Como o valor do registrador R%d = %d. Retorna para a instrucao da linha %d\n\n", registradoresDst[n], registradores[registradoresDst[n]], registradores[registradoresDst[n]]);
+					n = aux;					
+				} else {
+					n++;
+				}
 				break;
 			case 4:
-				je(&registradores[x.dst], x.a, x.b);
+				printf("JLT R%d, R%d, R%d  (Compara o valor que tem no registrador R%d com o valor que tem no registrador R%d, se R%d == R%d, retona para a instrucao equivalente ao valor do registrador R%d).\n", registradoresDst[n], instrA[n], instrB[n], instrA[n], instrB[n], instrA[n], instrB[n], registradoresDst[n]);
+				aux = je(&registradores[registradoresDst[n]], &registradores[instrA[n]], &registradores[instrB[n]]);
+				if(aux) {
+					printf("Como o valor do registrador R%d = %d. Retorna para a instrucao da linha %d\n\n", registradoresDst[n], registradores[registradoresDst[n]], registradores[registradoresDst[n]]);
+					n = aux;					
+				} else {
+					n++;
+				}
 				break;
 			case 5:
-				jmp(&registradores[x.dst]);
+				aux = jmp(&registradores[registradoresDst[n]]);
+				n = aux;
 				break;
 			case 6:
-				ld(&registradores[x.dst], &memoria[x.a]);
+				ld(&registradores[registradoresDst[n]], &memoria[instrA[n]]);
+				n++;
 				break;
 			case 7:
-				sd(&registradores[x.dst], &memoria[x.a]);
+				sd(&registradores[registradoresDst[n]], &memoria[instrA[n]]);
+				printf("R%d: %d\tM%d: %d\n", registradoresDst[n], registradores[registradoresDst[n]], instrA[n], memoria[instrA[n]]);
+				n++;
 				break;
 			case 8:
 				hlt();
 				break;
 			case 9:
-				prt(&registradores[x.dst], x.dst);
+				prt(&registradores[registradoresDst[n]]);
 				break;
 			default:
 				break;
+		}
+		
+		if(*apontador == 8) {
+			break;
 		}
 	}
 }
 
 void add(int *registrador, int *registradorA, int *registradorB) {
-	*registrador = *registradorA + *registradorB;
+	*registrador = *registradorA + *registradorB;	
 }
 
 void addi(int *registradorDst, int *registradorA, int b) {
@@ -111,20 +143,24 @@ void sub(int *registrador, int *registradorA, int *registradorB) {
 	*registrador = *registradorA - *registradorB;
 }
 
-void jlt(int *registrador, int a, int b) {
-	if(a < b) {
-		*registrador = *registrador;		
+int jlt(int *registrador, int *registradorA, int *registradorB) {
+	if(*registradorA < *registradorB) {
+		return *registrador;
+	} else {
+		return NULL;
 	}
 }
 
-void je(int *registrador, int a, int b) {
+int je(int *registrador, int a, int b) {
 	if(a == b) {
-		*registrador = *registrador;		
+		return *registrador;		
+	} else {
+		return NULL;
 	}
 }
 
 void jmp(int *registrador) {
-	*registrador = *registrador;
+	return *registrador;
 }
 
 void ld(int *registrador, int *memoria) {
